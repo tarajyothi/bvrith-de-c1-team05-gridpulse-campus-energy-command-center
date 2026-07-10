@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large compressed files
+*.zip
+*.7z
+*.rar
+
+# Large data files
+*.parquet
+*.delta
+
+# Databricks / local exports
+dbfs/
+spark-warehouse/
+
+# Power BI temporary files
+*.tmp
+*.bak

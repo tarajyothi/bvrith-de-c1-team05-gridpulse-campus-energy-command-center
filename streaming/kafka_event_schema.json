@@ -1,0 +1,27 @@
+{
+  "topic_name": "project.events",
+  "implementation_status": "design_only_not_mandatory",
+  "description": "Kafka-style event design for production architecture awareness. Kafka implementation is not required for this internship.",
+  "key": {
+    "field": "event_id",
+    "type": "string"
+  },
+  "value_schema": {
+    "event_id": "string",
+    "event_timestamp": "timestamp",
+    "event_type": "string",
+    "entity_id": "string",
+    "severity": "string",
+    "payload": "object"
+  },
+  "sample_event": {
+    "event_id": "EVT-001",
+    "event_timestamp": "2026-07-03T18:00:00+05:30",
+    "event_type": "alert",
+    "entity_id": "ENT-0001",
+    "severity": "medium",
+    "payload": {
+      "message": "Sample event"
+    }
+  }
+}
