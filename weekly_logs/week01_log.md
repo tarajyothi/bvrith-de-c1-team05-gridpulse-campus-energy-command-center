@@ -1,7 +1,7 @@
 # Week 01 Log — Project Setup & Documentation
 
 **Week:** 1  
-**Date range:** [Add dates]  
+**Date range:** [10 July 2026 – 16 July 2026]  
 **Team:** [Team 05 / GridPulse]  
 **Project:** [GridPulse: Campus Energy Command Center]
 
