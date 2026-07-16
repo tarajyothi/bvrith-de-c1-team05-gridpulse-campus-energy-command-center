@@ -1,40 +1,35 @@
-# [PROJECT TITLE]
+# [GridPulse: Campus Energy Command Center]
 
 > **Student note:** Start with `00_START_HERE.md` and `00_TEMPLATE_INDEX.md`. The placeholder files inside this repo are the templates.
-
 
 **Program:** ZENAIZ x BVRIT Hyderabad Data Engineering Internship Program  
 **Track:** Data Engineering  
 **Duration:** 12 Weeks  
-**Team:** [Team Number / Team Name]  
-**Students:** [Student 1], [Student 2], [Student 3]  
+**Team:** [ Team 05 / GridPulse ]  
+**Students:** [Ms.Diddala Tara Jyothi], [Ms.Hari Nanditha], [Ms. Shiva Sri]  
 **AI Teammate:** Used responsibly for explanation, debugging, review, and documentation support.
 
 ---
 
 ## 1. Project Summary
 
-Write 5–8 lines explaining the assigned project.
-
-Example structure:
-
-- **Domain:** [Urban Mobility / IPL Matchday / Weather / etc.]
-- **Core engineering problem:** [What raw data needs to become trusted insight?]
-- **Main pipeline:** Raw Sources → Bronze → Silver → Data Quality → Gold → Power BI → Streaming Simulation
-- **Final outcome:** GitHub repo, Databricks notebooks, Gold outputs, Power BI dashboard, streaming simulation, final demo.
-
+- **Domain:** Campus Energy Management
+- **Core engineering problem:** Transform raw campus energy consumption data into accurate, reliable, and actionable insights for monitoring and decision-making.
+- **Main pipeline:** Raw Energy Data → Bronze Layer → Silver Layer → Data Quality Checks → Gold Layer → Power BI Dashboard → Streaming Simulation
+- **Final outcome:** GitHub repository, Databricks notebooks, Bronze/Silver/Gold datasets, Power BI dashboard, streaming simulation, and final project demonstration.
 ---
 
 ## 2. Tools Used
 
 | Tool | Purpose |
 |---|---|
-| Databricks Free Edition | Spark SQL notebooks, light Python/PySpark, Bronze/Silver/Gold tables, streaming simulation |
-| GitHub | Repository, weekly evidence, documentation, screenshots, commits |
-| Power BI Desktop | Dashboard from Gold outputs |
-| AI Assistant | Explanation, debugging, review, documentation support with manual verification |
+| Databricks Free Edition | Process campus energy data using Spark SQL, PySpark, and Bronze/Silver/Gold architecture |
+| GitHub | Repository management, version control, weekly documentation, screenshots, and commits |
+| Power BI Desktop | Visualize Gold layer data through interactive dashboards |
+| AI Assistant | Used responsibly for explanation, debugging, code review, and documentation support with manual verification |
 
 ---
+
 
 ## 3. Repository Navigation
 
