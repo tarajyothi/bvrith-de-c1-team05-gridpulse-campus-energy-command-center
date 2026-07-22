@@ -1,13 +1,13 @@
 # Synthetic Data Assumptions
 
 **Week:** 2  
-**Purpose:** Document how educational data is created.
+**Purpose:** Document how the GridPulse synthetic campus energy data is created and used.
 
 ---
 
 ## 1. Synthetic Data Boundary
 
-This project uses synthetic educational data only. It must not be presented as real company, customer, citizen, player, patient, government, or platform data.
+This project uses **synthetic campus energy data only**. The data does not represent any real campus, organization, customer, or utility. It is intended only for educational and internship purposes.
 
 ---
 
@@ -15,22 +15,24 @@ This project uses synthetic educational data only. It must not be presented as r
 
 | Area | Assumption |
 |---|---|
-| Geography / scope | [Example: Hyderabad and nearby regions] |
-| Time period | [Example: July to September 2026] |
-| Source systems | [Example: Two different operational feeds] |
-| Event types | [Example: booking, scan, alert, transaction] |
-| Reference data | [Example: zones, categories, products, venues] |
+| Geography / scope |  Fictional GridPulse Campus |
+| Time period | January 2026 (15-minute interval energy readings) |
+| Source systems | Parquet, CSV, JSON and JSON Lines source files |
+| Event types | Energy readings and meter events  |
+| Reference data | Buildings, Meters and Tariff Plans  |
 
 ---
 
 ## 3. Data Volume Assumptions
 
 | File | Approximate Rows | Reason |
-|---|---:|---|
-| `[source_file_1].csv` | [rows] | [reason] |
-| `[source_file_2].csv` | [rows] | [reason] |
-| `[reference_file].csv` | [rows] | [reason] |
-| `[streaming_events].json` | [rows] | [reason] |
+|------|------------------|--------|
+| consumption_readings.parquet | 300000 | Main energy consumption data |
+| buildings.json | 20 | Building master data |
+| meters.csv | 120 | Meter reference data |
+| tariffs.csv | 9 | Tariff reference data |
+| meter_reading_drop_01.json | 100 | Streaming event sample |
+| meter_reading_drop_02.json | 100 | Streaming event sample |
 
 ---
 
