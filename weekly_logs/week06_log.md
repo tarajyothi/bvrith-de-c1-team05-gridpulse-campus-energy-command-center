@@ -1,15 +1,17 @@
 # Week 06 Log — Data Quality Checks
 
 **Week:** 6  
-**Date range:** [Add actual Week 6 dates]  
-**Team:** [Add your team name / number]  
+**Date range:**  
+**Team:** Team 5  
 **Project:** GridPulse – Campus Energy Command Center
 
 ---
 
 ## 1. Sprint Goal
 
-Implement the eight governed Week 06 Data Quality (DQ) rules, identify failed records, route DQ-invalid records to quarantine, retain trusted records, reconcile candidate/trusted/quarantine counts, and document business impact.
+Implement and validate the Week 06 Data Quality checks on the trusted Silver data.
+
+Identify nulls, duplicate readings, negative energy values, future timestamps, and missing meter references before downstream Gold processing.
 
 ---
 
@@ -18,89 +20,84 @@ Implement the eight governed Week 06 Data Quality (DQ) rules, identify failed re
 | Task | Status | Evidence |
 |---|---|---|
 | Created/updated Week 06 Data Quality notebook | Done | `notebooks/04_data_quality_checks.ipynb` |
-| Implemented DQ-RDG-001 to DQ-RDG-006 | Done | `week06_dq_results.png` |
-| Implemented DQ-MTR-001 | Done | `week06_dq_results.png` |
-| Implemented DQ-TRF-001 | Done | `week06_dq_results.png` |
-| Created Trusted and Quarantine outputs | Done | Databricks DQ results |
-| Captured failed meter records | Done | `week06_failed_records_sample.png` |
-| Completed controlled replay | Done | `week06_replay_closure_evidence.png` |
-| Retained original quarantined record after replay | Done | `week06_replay_quarantine_closed.png` |
-| Updated DQ results documentation | Done | `docs/data_quality_summary.md` |
+| Implemented DQ-01 required fields check | Done | `week06_dq_results.png` |
+| Implemented DQ-02 duplicate `reading_id` check | Done | `week06_dq_results.png` |
+| Implemented DQ-03 negative `energy_kwh` check | Done | `week06_dq_results.png` |
+| Implemented DQ-04 future `reading_ts` check | Done | `week06_dq_results.png` |
+| Implemented DQ-05 missing meter reference check | Done | `week06_dq_results.png` |
+| Created DQ summary output | Done | `week06_dq_results.png` |
+| Captured failed-record validation | Done | `week06_failed_records_sample.png` |
 
 ---
 
 ## 3. DQ Results
 
-| Rule ID | Failed Records |
-|---|---:|
-| DQ-MTR-001 | 90 |
-| DQ-RDG-001 | 0 |
-| DQ-RDG-002 | 0 |
-| DQ-RDG-003 | 0 |
-| DQ-RDG-004 | 0 |
-| DQ-RDG-005 | 0 |
-| DQ-RDG-006 | 0 |
-| DQ-TRF-001 | 2 |
+| Rule ID | DQ Rule | Failed Records |
+|---|---|---:|
+| DQ-01 | Required fields NULL check | 0 |
+| DQ-02 | Duplicate `reading_id` check | 0 |
+| DQ-03 | Negative `energy_kwh` check | 0 |
+| DQ-04 | Future `reading_ts` check | 0 |
+| DQ-05 | Missing meter reference check | 0 |
 
 ### Important DQ observations
 
-- 90 meter master records failed DQ-MTR-001 because of invalid meter-to-building references and/or invalid meter master data.
-- 2 tariff master records failed DQ-TRF-001 because of an incompatible effective time-band overlap.
-- Reading-level tariff resolution succeeded for all 500 consumption readings.
-- No consumption reading records were quarantined.
-- No silent deletion of failed physical records was performed.
+- No NULL values were found in the required reading fields.
+- No duplicate `reading_id` values were found.
+- No negative `energy_kwh` values were found.
+- No future-dated readings were found.
+- No consumption readings referenced a missing meter.
+- No failed records were identified in the current Silver dataset.
+- No records were silently deleted.
 
 ---
 
-## 4. Trusted and Quarantine Routing
+## 4. DQ Validation Summary
 
-| Entity | Candidate | Trusted | Quarantine | Reconciliation Variance |
-|---|---:|---:|---:|---:|
-| Buildings | 5 | 5 | 0 | 0 |
-| Meters | 120 | 30 | 90 | 0 |
-| Consumption Readings | 500 | 500 | 0 | 0 |
-| Tariffs | 9 | 7 | 2 | 0 |
+| Check | Result |
+|---|---|
+| Required fields validation | PASS |
+| Duplicate reading validation | PASS |
+| Negative energy validation | PASS |
+| Future timestamp validation | PASS |
+| Meter reference validation | PASS |
 
-Trusted and quarantine outputs were kept separate, and candidate counts reconciled to trusted plus quarantine counts with zero variance.
+All implemented DQ checks returned zero failed records for the current Silver dataset.
 
 ---
 
 ## 5. Business Impact
 
-- 75% of meter master records were quarantined.
-- Quarantined meters must not be used for trusted building attribution or downstream Gold aggregation.
-- Invalid meter references can affect building-level energy metrics if they are allowed into trusted joins.
-- Two tariff master records were quarantined because of an incompatible effective time-band overlap.
-- The failed records were retained for controlled correction/replay rather than being silently deleted.
+- The current Silver consumption dataset passed all implemented Week 06 validation checks.
+- No invalid consumption records required quarantine based on the checks executed.
+- Validating meter references before Gold processing helps prevent orphan meter records from affecting downstream building-level metrics.
+- Validating timestamps and energy values helps protect downstream energy and demand calculations.
+- The DQ results provide evidence that the current sample is suitable for the next Gold-layer processing stage.
 
 ---
 
-## 6. Controlled Replay
+## 6. Failed Record Validation
 
-A controlled training replay was performed using:
+A failed-record validation was executed after the DQ checks.
 
-**Source record:** `SRC-MTR-0031`  
-**Meter:** `MTR0031`  
-**Original building:** `BLD006`  
-**Corrected building:** `BLD001`  
-**Rule:** `DQ-MTR-001`
+Result:
 
-The correction was explicitly treated as:
+- DQ-01: 0 failed records
+- DQ-02: 0 failed records
+- DQ-03: 0 failed records
+- DQ-04: 0 failed records
+- DQ-05: 0 failed records
 
-`CONTROLLED_TRAINING_REWORK`
-
-After replay, DQ-MTR-001 returned **0 failed records** and the replay status was **PASS**.
-
-The original quarantined record remained retained in quarantine as evidence.
+No failed records were available for a quarantine sample in the current Silver dataset.
 
 ---
 
 ## 7. Blockers / Risks / Limitations
 
-- No approved numeric engineering-limit configuration was available for the upper-bound portions of DQ-RDG-004, so no limits were invented.
-- No approved formula tolerance was available for the energy/power consistency portion of DQ-RDG-006, so no unsupported failure threshold was invented.
-- No explicit expected active-meter schedule configuration was available for inferring missing intervals in DQ-RDG-005; observable interval continuity and duplicate checks were performed without inventing a schedule.
-- The controlled replay correction was a training rework and is not presented as proof of the real source building assignment.
+- The current Week 06 implementation covers the DQ checks that were executed and verified in Databricks.
+- No artificial defects were introduced merely to produce failed-record screenshots.
+- The current sample contains no failures for the implemented checks, so quarantine behavior was not demonstrated with an actual failed consumption record.
+- Additional governed DQ rules can be added when their approved configuration and implementation are available.
 
 ---
 
@@ -109,9 +106,6 @@ The original quarantined record remained retained in quarantine as evidence.
 - `notebooks/04_data_quality_checks.ipynb`
 - `screenshots/week06_dq_results.png`
 - `screenshots/week06_failed_records_sample.png`
-- `screenshots/week06_replay_closure_evidence.png`
-- `screenshots/week06_replay_quarantine_closed.png`
-- `docs/data_quality_summary.md`
 - `weekly_logs/week06_log.md`
 
 ---
@@ -120,16 +114,16 @@ The original quarantined record remained retained in quarantine as evidence.
 
 | Question | Response |
 |---|---|
-| Where AI helped | AI assistance was used to structure the Week 06 DQ implementation and documentation. |
-| What was adapted | The implementation was adapted to the actual GridPulse Bronze/Silver tables, fields, rule IDs, and Databricks environment. |
-| What was verified manually | All DQ queries, failure counts, routing results, reconciliation checks, and replay results were executed and verified in Databricks. |
-| Numeric thresholds | No numeric engineering limits or formula tolerances were invented when approved configuration was unavailable. |
-| Final responsibility | The team validated the DQ results, quarantine routing, evidence, and business impact in Databricks. |
+| Where AI helped | AI assistance was used to structure the Week 06 DQ notebook, explain validation logic, and organize the DQ documentation. |
+| What was adapted | The suggested checks were adapted to the actual GridPulse Silver table names, fields, and Databricks environment. |
+| What was verified manually | All DQ queries and their results were executed and checked directly in Databricks. |
+| Failure handling | No artificial failures were created when the actual dataset returned zero failures. |
+| Final responsibility | The team validated the DQ results and evidence in Databricks and is responsible for the final interpretation. |
 
 ---
 
 ## 10. Next Week Preparation
 
-- Prepare for Week 07 Gold aggregations and business metrics.
-- Use only trusted Silver records for downstream Gold processing.
-- Review quarantined records and controlled rework opportunities before downstream aggregation.
+- Prepare the validated Silver data for Week 07 Gold processing.
+- Build the approved Gold dimensions, facts, and aggregate tables.
+- Validate Gold table grain, joins, and business metrics before dashboard development.
