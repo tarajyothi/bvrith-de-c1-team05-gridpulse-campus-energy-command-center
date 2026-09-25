@@ -1,0 +1,6 @@
+building_id,building_name,building_type,campus_zone,commissioning_date,criticality_band,floor_area_sqm,operating_profile,active_flag
+BLD001,GridPulse Academic Block 01,Academic,North,2011-02-04,Medium,3450.0,Weekday 07:30-18:30,True
+BLD002,GridPulse Laboratory Block 02,Laboratory,South,2012-03-07,High,3850.0,Extended 06:00-23:00,True
+BLD003,GridPulse Administration Block 03,Administration,East,2013-04-10,Medium,5650.0,Weekday 08:30-18:00,True
+BLD004,GridPulse Library Block 04,Library,West,2014-05-13,Medium,8050.0,Daily 08:00-22:00,True
+BLD005,GridPulse Hostel Block 05,Hostel,Central,2015-06-16,High,3000.0,24x7 residential profile,True

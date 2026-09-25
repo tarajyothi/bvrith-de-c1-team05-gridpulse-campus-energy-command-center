@@ -1,0 +1,5 @@
+time_band_key,time_band,start_hour,end_hour
+0,Night,0,6
+1,Morning,6,12
+2,Afternoon,12,18
+3,Evening,18,24
