@@ -1,46 +1,108 @@
 # Structured Streaming Design
 
+## GridPulse – Campus Energy Command Center
+
 **Week:** 10  
-**Purpose:** Explain the streaming simulation.
+**Team:** Team 05  
+**Notebook:** `notebooks/07_streaming_simulation.ipynb`
 
 ---
 
-## 1. Streaming Scenario
+## 1. Purpose
 
-Describe the event flow.
+Week 10 implements a controlled streaming simulation for GridPulse meter events.
 
-Example:
+The objective is to demonstrate how incoming JSON meter-reading events can be processed using Databricks Structured Streaming with:
 
-> New JSON event files arrive in a streaming input path. Databricks Auto Loader detects the files, Structured Streaming processes them, and the output is written to a Streaming Bronze table.
+- Explicit event schema
+- Event timestamp parsing
+- 15-minute watermark
+- Event deduplication
+- Reference validation
+- Business-rule validation
+- Sequence validation
+- Trusted and quarantine outputs
+- Checkpoint-based replay protection
+- Raw payload retention for malformed/schema-drift records
+
+This implementation uses controlled JSON file drops rather than a live Kafka broker.
 
 ---
 
-## 2. Event Source
+## 2. Input Files
 
-| Item | Description |
+The streaming simulation uses two controlled JSON drops:
+
+- `meter_reading_drop_01.json`
+- `meter_reading_drop_02.json`
+
+Input location used in Databricks:
+
+`/Volumes/workspace/default/week10_streaming/`
+
+The second drop intentionally contains invalid and edge-case events to demonstrate streaming data-quality controls.
+
+---
+
+## 3. Event Schema
+
+The streaming event contains 15 fields:
+
+| Field | Type |
 |---|---|
-| Event file format | JSON |
-| Input path | `/Volumes/workspace/default/<project_name>/streaming_input/` |
-| Processing method | Auto Loader / Structured Streaming |
-| Output table | `bronze_streaming_events` |
-| Checkpoint path | `/Volumes/workspace/default/<project_name>/checkpoints/...` |
+| event_id | string |
+| schema_version | string |
+| event_ts | string |
+| event_type | string |
+| meter_id | string |
+| building_id | string |
+| tariff_plan_id | string |
+| energy_kwh | double |
+| active_power_kw | double |
+| voltage_v | double |
+| current_a | double |
+| power_factor | double |
+| meter_status | string |
+| event_sequence_no | integer |
+| producer_run_id | string |
+
+The canonical schema is documented in:
+
+`streaming/kafka_event_schema.json`
 
 ---
 
-## 3. Near-Real-Time Metric
+## 4. Streaming Processing Flow
 
-Define one simple live metric.
-
-Example:
-
-| Metric | Formula | Use |
-|---|---|---|
-| Event count by severity | Count events grouped by severity | Shows alert pressure |
-
----
-
-## 4. Limitations
-
-- This is a student streaming simulation, not a production event platform.
-- Kafka is documented as production architecture awareness only.
-- Streaming events are synthetic and educational.
+```text
+JSON Drop 01
+     |
+     v
+Structured Streaming
+     |
+     v
+Schema Parsing
+     |
+     v
+Timestamp Parsing
+     |
+     v
+15-Minute Watermark
+     |
+     v
+Event ID Deduplication
+     |
+     v
+Reference + Business Validation
+     |
+     +----------------------+
+     |                      |
+     v                      v
+ TRUSTED                QUARANTINE
+     |                      |
+     v                      v
+trusted_silver_       quarantine_
+meter_events          meter_events
+     |
+     v
+fact_meter_event_week10_final
