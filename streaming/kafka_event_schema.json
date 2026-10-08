@@ -1,27 +1,82 @@
 {
-  "topic_name": "project.events",
-  "implementation_status": "design_only_not_mandatory",
-  "description": "Kafka-style event design for production architecture awareness. Kafka implementation is not required for this internship.",
-  "key": {
-    "field": "event_id",
-    "type": "string"
-  },
-  "value_schema": {
-    "event_id": "string",
-    "event_timestamp": "timestamp",
-    "event_type": "string",
-    "entity_id": "string",
-    "severity": "string",
-    "payload": "object"
-  },
-  "sample_event": {
-    "event_id": "EVT-001",
-    "event_timestamp": "2026-07-03T18:00:00+05:30",
-    "event_type": "alert",
-    "entity_id": "ENT-0001",
-    "severity": "medium",
-    "payload": {
-      "message": "Sample event"
+  "event_name": "gridpulse_meter_event",
+  "schema_version": "1.0",
+  "description": "GridPulse meter reading event schema for controlled streaming simulation",
+  "fields": [
+    {
+      "name": "event_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "schema_version",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "event_ts",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "event_type",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "meter_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "building_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "tariff_plan_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "energy_kwh",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "active_power_kw",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "voltage_v",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "current_a",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "power_factor",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "meter_status",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "event_sequence_no",
+      "type": "integer",
+      "nullable": true
+    },
+    {
+      "name": "producer_run_id",
+      "type": "string",
+      "nullable": true
     }
-  }
+  ]
 }
